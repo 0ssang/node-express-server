@@ -5,9 +5,9 @@
 find ../logs -name "*.txt" -type f -exec rm -f {} +
 
 # 로그파일을 로그레벨별로 추출하기
-cat ../logs/sample.log | awk '$1 == "error"' >> ../logs/errorLog.txt
-cat ../logs/sample.log | awk '$1 == "default"' >> ../logs/defaultLog.txt
-cat ../logs/sample.log | awk '$1 == "info"' >> ../logs/infoLog.txt
+awk '$1 == "error" { print > "../logs/errorLog.txt" }
+     $1 == "default" { print > "../logs/defaultLog.txt" }
+     $1 == "info" { print > "../logs/infoLog.txt" }' ../logs/sample.log
 
 
 echo "logs 디렉토리에 로그 레벨별 로그가 생성됨"
