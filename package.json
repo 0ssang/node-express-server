@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/0ssang/node-express-server/issues"
   },
-  "homepage": "https://github.com/0ssang/node-express-server#readme"
+  "homepage": "https://github.com/0ssang/node-express-server#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
 }
