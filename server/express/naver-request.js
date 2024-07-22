@@ -1,4 +1,6 @@
-/* request 모듈로 NAVER API 사용 */
+/** request 모듈로 NAVER API 사용 
+ * request module은 http 클라이언트 라이브러리 중 가장 오래됨(deprecated)
+*/
 const morgan = require('morgan');
 const request = require('request');
 const express = require('express');
@@ -31,7 +33,8 @@ app.get('/naver/news', (req, res) => {
     request.get(options, (error, response, body) => {
         if(!error && response.statusCode == 200){
             let newsItem = JSON.parse(body).items;
-
+            // items - title, link, description, pubDate
+            
             const newsJson = {
                 title: [],
                 link: [],
