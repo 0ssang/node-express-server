@@ -31,6 +31,9 @@
 
 
 // 에어코리아 API 사용
+const path = require('path');
+const dotenv = require('dotenv');
+dotenv.config({ path: path.join(process.cwd(), "/.env") });
 const morgan = require('morgan');
 const axios = require('axios');
 const express = require('express');
@@ -46,7 +49,7 @@ app.use(express.urlencoded({ extended: true }));
 
 /* 라우팅 설정 */
 app.get('/airkorea', async (req, res) => {
-    const serviceKey = 'Gc8sqpe0qCrHU%2B%2B%2BsX005EEQPweN6Nlp3O5Bgoj5jk6sYx%2Bnjo3AeNq5U52ConNDD7BOHgo4Z0xgFj%2BL8DVIaw%3D%3D'
+    const serviceKey = process.env.airServiceKey;
     const airUrl = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?";
 
     let params = encodeURI('serviceKey') + '=' + serviceKey;

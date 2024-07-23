@@ -1,9 +1,13 @@
 /** request 모듈로 NAVER API 사용 
  * request module은 http 클라이언트 라이브러리 중 가장 오래됨(deprecated)
 */
+const path = require('path');
+const dotenv = require('dotenv');
+dotenv.config({ path: path.join(process.cwd(), "/.env") });
 const morgan = require('morgan');
 const request = require('request');
 const express = require('express');
+
 const app = express();
 
 /* 포트 설정 */
@@ -16,8 +20,8 @@ app.use(express.urlencoded({ extended: true }));
 
 /* 라우팅 설정 */
 app.get('/naver/news', (req, res) => {
-    const client_id = 'codigDgDAoVIadetLUbF';
-    const client_secret = 'iKbKqrRnwX';
+    const client_id = process.env.naverClientKey;
+    const client_secret = process.env.naverSecret;
     const api_url = 'https://openapi.naver.com/v1/search/news?query='+ encodeURI('코스피');
 
     const option = {};
