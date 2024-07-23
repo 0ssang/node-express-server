@@ -53,7 +53,7 @@ app.get('/airkorea', async (req, res) => {
     const airUrl = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?";
 
     let params = encodeURI('serviceKey') + '=' + serviceKey;
-    params += '&' + encodeURI('numOfRows') + '=' + encodeURI('2');
+    params += '&' + encodeURI('numOfRows') + '=' + encodeURI('1');
     params += '&' + encodeURI('pageNo') + '=' + encodeURI('1');
     params += '&' + encodeURI('dataTerm') + '=' + encodeURI('DAILY');
     params += '&' + encodeURI('ver') + '=' + encodeURI('1.3');
