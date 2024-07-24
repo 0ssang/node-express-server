@@ -55,6 +55,7 @@ client.on('ready', () => {
     console.log('Redis client connected');
 });
 
+
 /* 포트 설정 */
 app.set('port', process.env.PORT);
 
@@ -65,7 +66,11 @@ app.use(express.urlencoded({ extended: true }));
 
 /* 라우팅 설정 */
 app.get('/airkorea', async (req, res) => {
-    await client.lRange('airItems', 0, -1, async (err, cachedItems) => {
+    if (!clientConnected) {
+        await client.connect();
+        clientConnected = true;
+    }
+    client.lRange('airItems', 0, -1, async (err, cachedItems) => {
         if(err) throw err;
         if(cachedItems.length){
             res.send(`데이터가 캐시에 있습니다. <br>
