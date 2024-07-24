@@ -27,6 +27,13 @@
  *      axios.request(config)
  *      axios.head(url[, config])
  *      axios.options(url[, config])
+ * 
+ * 
+ *  redis v4의 비동기 처리
+ *  v4부터는 Promise 객체를 반환한다. 따라서 async/await으로 처리를 반드시 해야 함
+ *  
+ * forEach() 메서드는 내부에 await 키워드 동작하지 않음 => 각 비동기 호출이 병렬적으로 실행되기 때문.
+ * 따라서 for..of 문을 사용하면 내부에 await 키워드가 올바르게 동작함.
  */
 
 
@@ -70,8 +77,8 @@ app.get('/airkorea', async (req, res) => {
         await client.connect();
         clientConnected = true;
     }
-    client.lRange('airItems', 0, -1, async (err, cachedItems) => {
-        if(err) throw err;
+    try {
+        const cachedItems = await client.lRange('airItems', 0, -1);
         if(cachedItems.length){
             res.send(`데이터가 캐시에 있습니다. <br>
                 관측 지역: ${cachedItems[0]} / 관측 시간: ${cachedItems[1]} <br>
@@ -117,19 +124,20 @@ app.get('/airkorea', async (req, res) => {
                 }
                 
                 const airItems = [airItem.location, airItem.time, badAir[0], badAir[1]];
-                airItems.forEach((val) => {
-                    // Redis 저장
-                    client.rPush('airItems', val);
-                });
-                client.expire('airItems', 60 * 60);
-
+                for(const val of airItems){
+                    await client.rPush('airItems', val);
+                }
+                await client.expire('airItems', 60 * 60);
                 res.send('캐시된 데이터가 없습니다.');
-            } catch (error) {
+            } catch(error) {
                 console.error('Error fetching data from API:', error);
                 res.status(500).send('Internal Server Error');
             }
         }
-    })
+    } catch (error){
+        console.error('Error reading from Redis:', error);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
 /* 서버와 포트 연결 */
