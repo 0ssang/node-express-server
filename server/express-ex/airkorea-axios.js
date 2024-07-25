@@ -140,6 +140,31 @@ app.get('/airkorea', async (req, res) => {
     }
 });
 
+app.get('/airkorea/mapogu', async (req, res) => {
+    if (!clientConnected) {
+        await client.connect();
+        clientConnected = true;
+    }
+    const serviceKey = process.env.airServiceKey;
+    const airUrl = "http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMsrstnAcctoRltmMesureDnsty?";
+    let params = encodeURI('serviceKey') + '=' + serviceKey;
+    params += '&' + encodeURI('numOfRows') + '=' + encodeURI('5');
+    params += '&' + encodeURI('pageNo') + '=' + encodeURI('1');
+    params += '&' + encodeURI('dataTerm') + '=' + encodeURI('DAILY');
+    params += '&' + encodeURI('ver') + '=' + encodeURI('1.3');
+    params += '&' + encodeURI('stationName') + '=' + encodeURI('마포구');
+    params += '&' + encodeURI('returnType') + '=' + encodeURI('json');
+
+    const url = airUrl + params;
+    try {
+        const result = await axios.get(url);
+        res.json(result.data);
+    } catch (error) {
+        console.error('Error fetching data from API:', error);
+        res.status(500).send('Internal Server Error');
+    }
+})
+
 /* 서버와 포트 연결 */
 app.listen(app.get('port'), () => {
     console.log(app.get('port'), '번 포트에서 서버 실행중...');
