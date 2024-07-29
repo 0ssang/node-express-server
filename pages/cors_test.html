@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Board API TEST</title>
+</head>
+<body>
+    <div id="result"></div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        const reqUrl = "http://localhost:8080/board/";
+        const apiKey = encodeURI("1EVRN2R-31W4XPY-HCFJR1T-6ZZDSBD/");
+        const params = "search?keyword=test";
+        const url = reqUrl + apiKey + params;
+        axios.get(url)
+            .then((result) => {
+                document.querySelector("#result").textContent = JSON.stringify(result.data);
+            }).catch((err) => {
+                console.log(err);
+            });
+    </script>
+</body>
+</html>
